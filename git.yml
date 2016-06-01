@@ -7,5 +7,19 @@
     become_method: sudo
   - name: clone my project
     git: repo=https://github.com/swaksman/spring-petclinic.git dest=~/sp
-  - name: clone my project
-    git: repo=https://github.com/swaksman/my_ansibles.git dest=~/my_ansibles
+  - name: clone my ansible
+    git: repo=https://github.com/swaksman/my_ansibles.git update=no dest=~/my_ansibles
+  - name: get maven
+    get_url: url=http://apache.spd.co.il/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz dest=~
+  - name: make maven dir
+    file: path=/opt/maven/ state=directory mode=0755
+    become: yes
+    become_method: sudo
+  - name: unarchive
+    unarchive: src=~/apache-maven-3.3.9-bin.tar.gz dest=/opt/maven
+    become: yes
+    become_method: sudo
+  - name: add/update m2 path
+    lineinfile: dest=~/.bash_profile regexp="^M2_HOME=.*" line="export M2_HOME=/opt/mvn/apache-maven-3.3.9"
+    lineinfile: dest=~/.bash_profile regexp="^M2=.*" insertbefore="^PATH" line="export M2=/opt/mvn/apache-maven-3.3.9/bin"
+    lineinfile: dest=~/.bash_profile regexp="^PATH=$PATH:M"
