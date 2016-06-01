@@ -1,0 +1,11 @@
+- hosts: localhost
+  remote_user: root
+  tasks:
+  - name: ensure apache is at the latest version
+    yum: name=git
+    become: yes
+    become_method: sudo
+  - name: clone my project
+    git: repo=https://github.com/swaksman/spring-petclinic.git dest=~/sp
+  - name: clone my project
+    git: repo=https://github.com/swaksman/my_ansibles.git dest=~/my_ansibles
